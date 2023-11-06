@@ -1,0 +1,570 @@
+ApiServlet.java (parei aqui, aproximadamente no minuto 20 do vídeo):
+
+package web;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
+import model.User;
+import model.VehicleStay;
+import org.json.JSONObject;
+
+@WebServlet(name = "ApiServlet", urlPatterns = {"/api/*"})
+public class ApiServlet extends HttpServlet {
+
+    private JSONObject getJSONBody(BufferedReader reader) throws IOException{
+        StringBuilder buffer = new StringBuilder();
+        String line = null;
+        while((line = reader.readLine()) != null){
+            buffer.append(line);
+        }
+        return new JSONObject(buffer.toString());
+    }
+    
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html;charset=UTF-8");
+        JSONObject file = new JSONObject();
+        try{
+            if(request.getRequestURI().endsWith("/api/session")){
+                processSession(file, request, response);
+            }else if(request.getRequestURI().endsWith("/api/users")){
+                processUsers(file, request, response);
+            }else if(request.getRequestURI().endsWith("/api/parking")){
+                processParking(file, request, response);
+            }else{
+                response.sendError(400, "Invalid URL");
+                file.put("error", "Invalid URL");
+            }
+        }catch(Exception ex){
+            response.sendError(500, "Internal Error: "+ex.getLocalizedMessage());
+        }
+        response.getWriter().print(file.toString());
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    processRequest(request, response);
+    }
+
+    @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    processRequest(request, response);
+    }
+
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }
+
+    private void processSession(JSONObject file, HttpServletRequest request, HttpServletResponse response) throws Exception{
+        if(request.getMethod().toLowerCase().equals("put")){
+            JSONObject body = getJSONBody(request.getReader());
+            String login = body.getString("login");
+            String password = body.getString("password");
+            User u = User.getUser(login, password);
+            if(u==null){
+                response.sendError(403, "Login or password incorrects");
+            }else{
+                request.getSession().setAttribute("user", u);
+                file.put("id", u.getRowId());
+                file.put("login", u.getLogin());
+                file.put("name", u.getName());
+                file.put("role", u.getRole());
+                file.put("passwordHash", u.getPasswordHash());
+                file.put("parkingHourPrice", VehicleStay.HOUR_PRICE);
+                file.put("message", "Logged in");
+            }
+        }else if(request.getMethod().toLowerCase().equals("delete")){
+                
+        }else if(request.getMethod().toLowerCase().equals("get")){
+                
+        }else{
+            response.sendError(405, "Method not allowed");
+        }
+    }
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+AppListener.java
+
+package web;
+
+import jakarta.servlet.ServletContextEvent;
+import jakarta.servlet.ServletContextListener;
+import jakarta.servlet.annotation.WebListener;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Date;
+import java.sql.*;
+import model.User;
+import model.VehicleStay;
+
+@WebListener
+public class AppListener implements ServletContextListener{
+    public static final String CLASS_NAME = "org.sqlite.JDBC";
+    public static final String URL = "jdbc:sqlite:parkapp.db";
+    public static String initializeLog = "";
+    public static Exception exception = null;
+
+    @Override
+    public void contextDestroyed(ServletContextEvent sce) {
+        
+    }
+
+    @Override
+    public void contextInitialized(ServletContextEvent sce) {
+       try{
+           Connection c = AppListener.getConnection();
+           Statement s = c.createStatement();
+           initializeLog += new Date() + ": Initializing database creation;";
+           initializeLog += "Creating Users table if not exists...";
+           s.execute(User.getCreateStatement());
+           if(User.getUsers().isEmpty()){
+               initializeLog += "Adding default users...";
+               User.insertUser("Admin", "Administrador", "ADMIN", "1234");
+               initializeLog += "Admin added; ";
+               User.insertUser("alves", "Alves dos Santos", "USER", "1234");
+               initializeLog += "Alves added; ";
+           }
+           initializeLog += "done;";
+           initializeLog += "Creating VehicleStay table if not exists...";
+           s.execute(VehicleStay.getCreateStatement());
+           initializeLog += "done.";
+           s.close();
+           c.close();
+       }catch(Exception ex){
+           initializeLog += "Erro: " + ex.getMessage();
+           exception = ex;
+       } 
+    }
+    
+    public static String getMd5Hash(String text) throws NoSuchAlgorithmException{
+        MessageDigest m = MessageDigest.getInstance("MD5");
+        m.update(text.getBytes(), 0, text.length());
+        return new BigInteger(1, m.digest()).toString();
+    }
+    
+    public static Connection getConnection() throws Exception{
+        Class.forName(CLASS_NAME);
+        return DriverManager.getConnection(URL);
+    }
+    
+}
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
+VehicleStay.java
+
+package model;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.sql.*;
+import web.AppListener;
+
+public class VehicleStay {
+    public static final double HOUR_PRICE = 10.0;
+
+    private long rowId;
+    private String VehicleModel;
+    private String VehicleColor;
+    private String VehiclePlate;
+    private Date beginStay;
+    private Date endStay;
+    private double price;   
+
+    public static String getCreateStatement(){
+        return "CREATE TABLE IF NOT EXISTS Vehicles_stays(\n"
+                + "    vehicle_model varchar(50) not null\n"
+                + "    , vehicle_color varchar(20) not null\n"
+                + "    , vehicle_plate varchar(7) not null\n"
+                + "    , begin_stay datetime not null\n"
+                + "    , end_stay datetime\n"
+                + "    , price numeric(10,2)\n"
+                + ")";
+    }
+    
+    public static ArrayList<VehicleStay> getList() throws Exception{
+        ArrayList<VehicleStay> list = new ArrayList<>();
+        Connection con = AppListener.getConnection();
+        Statement s = con.createStatement();
+        ResultSet rs = s.executeQuery("SELECT rowid, * FROM Vehicles_stays"
+                + " WHERE end_stay IS NULL");
+        while(rs.next()){
+            VehicleStay vs = new VehicleStay(
+            rs.getLong("rowid"),
+            rs.getString("vehicle_model"),
+            rs.getString("vehicle_color"),
+            rs.getString("vehicle_plate"),
+            rs.getTimestamp("begin_stay")
+            );
+            list.add(vs);
+        }
+        rs.close();
+        s.close();
+        con.close();
+        return list;
+    }
+    
+    public static ArrayList<VehicleStay> getHistoryList() throws Exception{
+        ArrayList<VehicleStay> list = new ArrayList<>();
+        String SQL = "SELECT rowid, * FROM Vehicles_stays WHERE end_stay IS NOT NULL";
+        Connection con = AppListener.getConnection();
+        PreparedStatement s = con.prepareStatement(SQL);
+        ResultSet rs = s.executeQuery();
+        while(rs.next()){
+            VehicleStay vs = new VehicleStay(
+            rs.getLong("rowid"),
+            rs.getString("vehicle_model"),  
+            rs.getString("vehicle_color"),
+            rs.getString("vehicle_plate"),
+            rs.getTimestamp("begin_stay"),
+            rs.getTimestamp("end_stay"),
+            rs.getDouble("price")
+            );
+            list.add(vs);
+        }
+        rs.close();
+        s.close();
+        con.close();
+        return list;
+    }
+    
+    public static void addVehicleStay(String model, String color, String plate) 
+            throws Exception{
+        String SQL = "INSERT INTO Vehicles_stays VALUES("
+                + "?" //vehicle_model
+                + ", ?" //vehicle_color
+                + ", ?" //vehicle_plate
+                + ", ?" //begin_stay
+                + ", NULL" //end_stay
+                + ", NULL"
+                + ")";
+        Connection con = AppListener.getConnection();
+        PreparedStatement s = con.prepareStatement(SQL);
+        s.setString(1, model);
+        s.setString(2, color);
+        s.setString(3, plate);
+        s.setTimestamp(4, new Timestamp(new Date().getTime()));
+        s.execute();
+        s.close();
+        con.close();
+    }
+    
+    public static void finishVehicleStay(long rowid, double price) 
+            throws Exception{
+        String SQL = "UPDATE Vehicles_stays"
+                + " SET end_stay=?, price=?"
+                + " WHERE rowid =?";
+        Connection con = AppListener.getConnection();
+        PreparedStatement s = con.prepareStatement(SQL);
+        s.setTimestamp(1, new Timestamp(new Date().getTime()));
+        s.setDouble(2, price);
+        s.setLong(3, rowid);
+        s.execute();
+        s.close();
+        con.close();
+    }
+    
+    public VehicleStay(long rowId, String VehicleModel, String VehicleColor, String VehiclePlate, Date beginStay, Date endStay, double price) {
+        this.rowId = rowId;
+        this.VehicleModel = VehicleModel;
+        this.VehicleColor = VehicleColor;
+        this.VehiclePlate = VehiclePlate;
+        this.beginStay = beginStay;
+        this.endStay = endStay;
+        this.price = price;
+    }
+
+    public VehicleStay(long rowId, String VehicleModel, String VehicleColor, String VehiclePlate, Date beginStay) {
+        this.rowId = rowId;
+        this.VehicleModel = VehicleModel;
+        this.VehicleColor = VehicleColor;
+        this.VehiclePlate = VehiclePlate;
+        this.beginStay = beginStay;
+    }
+
+    public long getRowId() {
+        return rowId;
+    }
+
+    public void setRowId(long rowId) {
+        this.rowId = rowId;
+    }
+
+    public String getVehicleModel() {
+        return VehicleModel;
+    }
+
+    public void setVehicleModel(String VehicleModel) {
+        this.VehicleModel = VehicleModel;
+    }
+
+    public String getVehicleColor() {
+        return VehicleColor;
+    }
+
+    public void setVehicleColor(String VehicleColor) {
+        this.VehicleColor = VehicleColor;
+    }
+
+    public String getVehiclePlate() {
+        return VehiclePlate;
+    }
+
+    public void setVehiclePlate(String VehiclePlate) {
+        this.VehiclePlate = VehiclePlate;
+    }
+
+    public Date getBeginStay() {
+        return beginStay;
+    }
+
+    public void setBeginStay(Date beginStay) {
+        this.beginStay = beginStay;
+    }
+
+    public Date getEndStay() {
+        return endStay;
+    }
+
+    public void setEndStay(Date endStay) {
+        this.endStay = endStay;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+    
+    
+}
+
+---------------------------------------------------------------------------------------------------------------------------------------------------
+index.jsp
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>JSP Page</title>
+    </head>
+    <body>
+        <h1>Hello World!</h1>
+        <%= web.AppListener.initializeLog %>
+    </body>
+</html>
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
+User.java
+
+package model;
+
+import java.util.ArrayList;
+import java.sql.*;
+import web.AppListener;
+
+public class User {
+    private long rowId;
+    private String name;
+    private String login;
+    private String role;
+    private String passwordHash;
+    
+    public static String getCreateStatement(){
+        return "CREATE TABLE IF NOT EXISTS users("
+                + "login VARCHAR(50) UNIQUE NOT NULL,"
+                + "name VARCHAR(200) NOT NULL,"
+                + "role VARCHAR(20) NOT NULL,"
+                + "password_hash VARCHAR NOT NULL"
+                + ")";
+    }
+
+    
+    public static ArrayList<User> getUsers() throws Exception{
+        ArrayList<User> list = new ArrayList<>();
+        Connection con = AppListener.getConnection();
+        Statement stmt = con.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT rowid, * from users");
+        while(rs.next()){
+            long rowId = rs.getLong("rowid");
+            String login = rs.getString("login");
+            String name = rs.getString("name");
+            String role = rs.getString("role");
+            String passwordHash = rs.getString("password_hash");
+            list.add(new User(rowId, login, name, role, passwordHash));
+        }
+        rs.close();
+        stmt.close();
+        con.close();
+        return list;
+    }
+    
+    public static User getUser(String login, String password) throws Exception{
+        User user = null;
+        Connection con = AppListener.getConnection();
+        String sql = "SELECT rowid * from users WHERE login=? AND password_hash=?";
+        PreparedStatement stmt = con.prepareStatement(sql);
+        stmt.setString(1, login);
+        stmt.setString(2 , AppListener.getMd5Hash(password));
+        ResultSet rs = stmt.executeQuery();
+        if(rs.next()){
+            long rowId = rs.getLong("rowid");
+            String name = rs.getString("name");
+            String role = rs.getString("role");
+            String passwordHash = rs.getString("password_hash");
+            user = new User(rowId, login, name, role, passwordHash);
+        }
+        rs.close();
+        stmt.close();
+        con.close();
+        return user;
+    }
+    
+    public static void insertUser(String login, String name, String role, String password) throws Exception{
+        Connection con = AppListener.getConnection();
+        String sql = "INSERT INTO users(login, name, role, password_hash) "
+                + "VALUES(?,?,?,?)";
+        PreparedStatement stmt = con.prepareStatement(sql);
+        stmt.setString(1, login);
+        stmt.setString(2, name);
+        stmt.setString(3, role);
+        stmt.setString(4, AppListener.getMd5Hash(password));
+        stmt.execute();
+        stmt.close();
+        con.close();
+    }
+    
+    public static void updateUser(String login, String name, String role, String password) throws Exception{
+        Connection con = AppListener.getConnection();
+        String sql = "UPDATE users SET name=?, role=?, password_hash=? WHERE login=?";
+        PreparedStatement stmt = con.prepareStatement(sql);
+        stmt.setString(1, name);
+        stmt.setString(2, role);
+        stmt.setString(3, AppListener.getMd5Hash(password));
+        stmt.setString(4, login);
+        stmt.execute();
+        stmt.close();
+        con.close();
+    }    
+    
+    public static void deleteUser(long rowId) throws Exception{
+        Connection con = AppListener.getConnection();
+        String sql = "DELETE FROM users WHERE rowid = ?";
+        PreparedStatement stmt = con.prepareStatement(sql);
+        stmt.setLong(1, rowId);
+        stmt.execute();
+        stmt.close();
+        con.close();
+    }
+    
+    public User(long rowId, String name, String login, String role, String passwordHash) {
+        this.rowId = rowId;
+        this.name = name;
+        this.login = login;
+        this.role = role;
+        this.passwordHash = passwordHash;
+    }
+
+    public long getRowId() {
+        return rowId;
+    }
+
+    public void setRowId(long rowId) {
+        this.rowId = rowId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+}
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
+users.jsp
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>JSP Page</title>
+    </head>
+    <body>
+        <h1>Hello World!</h1>
+    </body>
+</html>
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+history.jsp
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>JSP Page</title>
+    </head>
+    <body>
+        <h1>Hello World!</h1>
+    </body>
+</html>
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+header.jspf
+
+<%-- any content can be specified here e.g.: --%>
+<%@ page pageEncoding="UTF-8" %>
+<h2>Hello World!</h2>
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+
+(na pasta Libraries, adicionar o arquivo sqlite-jdbc-3.43.2.2.jar e json-20230618.jar)
