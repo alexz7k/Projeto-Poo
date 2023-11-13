@@ -3,17 +3,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Edit Food Item</title>
+    <title>Edit Properties Item</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <h1>Edit Food Item</h1>
+        <h1>Edit Properties Item</h1>
 
         <%
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection conn = DriverManager.getConnection("jdbc:mysql://http://localhost/FastImoveis/?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "");
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/fastimoveis/?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "");
             
             // Check if the form was submitted
             if (request.getMethod().equalsIgnoreCase("POST")) {
@@ -29,7 +29,7 @@
                 // Convert the price from String to Double
                 Double price = Double.parseDouble(priceStr);
                 
-                String updateQuery = "UPDATE alimentos SET endereco=?, descricao=?, preco=?, categoria=?, origem=?, data_validade=?, calorias=?, peso_gramas=?, fabricante=? WHERE id=?";
+                String updateQuery = "UPDATE imoveis SET endereco=?, categoria=?, preco=?, nome_vendedor=?, telefone_vendedor=?, email_vendedor=?, status=? WHERE id=?";
                 
                 PreparedStatement preparedStatement = conn.prepareStatement(updateQuery);
                 preparedStatement.setString(1, address);
@@ -38,9 +38,8 @@
                 preparedStatement.setString(4, sallerName);
                 preparedStatement.setInt(5, sallerPhone);
                 preparedStatement.setString(6, sallerEmail);
-                preparedStatement.setString(7, sallerEmail);
-                preparedStatement.setString(8, status);
-                preparedStatement.setInt(10, recordId);
+                preparedStatement.setString(7, status);
+                preparedStatement.setInt(8, recordId);
                 
                 int rowsUpdated = preparedStatement.executeUpdate();
                 preparedStatement.close();

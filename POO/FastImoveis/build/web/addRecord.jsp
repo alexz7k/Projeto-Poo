@@ -12,7 +12,7 @@ String status = request.getParameter("status");
 
 
 // Database connection parameters
-String dbUrl = "jdbc:mysql://localhost/alimentos?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
+String dbUrl = "jdbc:mysql://localhost/fastimoveis?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
 String dbUser = "root";
 String dbPassword = "";
 

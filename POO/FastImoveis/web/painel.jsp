@@ -77,15 +77,15 @@
 
                     </a>
                        
-                </div>
-                        <br>???<br>
-                         <a href="logout.jsp">Logout</a>
-            </div>
+                <div class="ms-3">
+        <a href="logout.jsp" class="btn btn-outline-light">Logout</a>
+    </div>
             <!-- Right elements -->
         </div>
         <!-- Container wrapper -->
     </nav>
     <!-- Navbar -->
+    
 
     <body>
         <div class="container">
@@ -94,7 +94,7 @@
 
             <h2 class="mt-5">Listagem de Imóveis</h2>
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">
-                Adicionar novo
+                Adicionar novo <!--********-->
             </button>
 
             <br>
@@ -158,7 +158,7 @@
 
 
 
-            <table id="alimentosTable" class="table table-striped">
+            <table id="imoveisTable" class="table table-striped">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -176,7 +176,7 @@
                     <%
                     try {
                         Class.forName("com.mysql.cj.jdbc.Driver");
-                        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/alimentos?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "");
+                        Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/fastimoveis?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "");
                         Statement stmt = conn.createStatement();
                         String query = "SELECT * FROM imoveis";
                         ResultSet rs = stmt.executeQuery(query);
@@ -189,9 +189,9 @@
                         <td><%= rs.getString("categoria") %></td>
                         <td><%= rs.getBigDecimal("preco") %></td>
                         <td><%= rs.getString("nome_vendedor") %></td>
-                        <td><%= rs.getString("telefone_vendedor") %></td>
-                        <td><%= rs.getDate("email_vendedor") %></td>
-                        <td><%= rs.getInt("status") %></td>
+                        <td><%= rs.getInt("telefone_vendedor") %></td>
+                        <td><%= rs.getString("email_vendedor") %></td>
+                        <td><%= rs.getString("status") %></td>
                         <td>
                             <i class="edit-icon icon-button" data-bs-toggle="modal" data-bs-target="#editModal<%= rs.getInt("id") %>">
                                 <i class="fas fa-edit"></i>
@@ -242,7 +242,7 @@
                                     <!-- You can populate this form with data from the current row -->
                                     <input type="hidden" name="recordId" value="<%= rs.getInt("id") %>">
                                     <div class="mb-3">
-                                        <label for="address" class="form-label">Address:</label>
+                                        <label for="addres class="form-label">Address:</label>
                                         <input type="text" class="form-control" id="Address" name="address" value="<%= rs.getString("endereco") %>">
                                     </div>
                                     <!-- Add more input fields as needed for editing -->
@@ -264,7 +264,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="sallerEmail" class="form-label">Saller Email:</label>
-                                        <input type="email" class="form-control" id="sallerEmail" name="sallerEmail" value="<%= rs.getDate("emailVendedor") %>">
+                                        <input type="email" class="form-control" id="sallerEmail" name="sallerEmail" value="<%= rs.getString("emailVendedor") %>">
                                     </div>
                                     <div class="mb-3">
                                         <label for="status" class="form-label">Status:</label>
@@ -333,7 +333,7 @@
         <script src="https://cdn.datatables.net/plug-ins/1.10.25/i18n/Portuguese-Brasil.json"></script>
         <script>
             $(document).ready(function () {
-                $('#alimentosTable').DataTable({
+                $('#imoveisTable').DataTable({
                     "language": {
                         "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Portuguese-Brasil.json"
                     },

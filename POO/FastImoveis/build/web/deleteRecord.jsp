@@ -3,7 +3,7 @@
 <%
 try {
     Class.forName("com.mysql.cj.jdbc.Driver");
-    Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/alimentos?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "");
+    Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/FastImoveis?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "");
 
     // Check if the request contains a record ID
     String recordIdStr = request.getParameter("recordId");
