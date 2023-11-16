@@ -26,9 +26,6 @@
 
                             </div>
 
-
-
-
                             <button class="btn btn-primary btn-lg btn-block" type="submit">Login</button>
 
                         </form>
@@ -37,7 +34,6 @@
                             <p>Não tem cadastro? <a href="registro.jsp">faça seu registro</a></p>
                            
                         </div>
-
 
                     </div>
                 </div>

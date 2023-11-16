@@ -9,7 +9,6 @@
         <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-
         <style>.edit-icon {
                 color: blue;
             }
@@ -69,7 +68,6 @@
                 <a class="text-reset me-3" href="#">
                     <i class="fas fa-shopping-cart"></i>
                 </a>
-
                
                 <div class="dropdown">
                     <a>
@@ -85,12 +83,9 @@
         <!-- Container wrapper -->
     </nav>
     <!-- Navbar -->
-    
 
     <body>
         <div class="container">
-           
-
 
             <h2 class="mt-5">Listagem de Imóveis</h2>
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">
@@ -156,8 +151,6 @@
                 </div>
             </div>
 
-
-
             <table id="imoveisTable" class="table table-striped">
                 <thead>
                     <tr>
@@ -187,9 +180,9 @@
                         <td><%= rs.getInt("id") %></td>
                         <td><%= rs.getString("endereco") %></td>
                         <td><%= rs.getString("categoria") %></td>
-                        <td><%= rs.getBigDecimal("preco") %></td>
+                        <td><%= rs.getBigDecimal("preco").toString() %></td>
                         <td><%= rs.getString("nome_vendedor") %></td>
-                        <td><%= rs.getInt("telefone_vendedor") %></td>
+                        <td><%= rs.getString("telefone_vendedor") %></td>
                         <td><%= rs.getString("email_vendedor") %></td>
                         <td><%= rs.getString("status") %></td>
                         <td>
@@ -200,9 +193,6 @@
                             <i class="delete-icon" type="button" class="btn btn-icon btn-danger" onclick="deleteRecord(<%= rs.getInt("id") %>)">
                                 <i class="fas fa-trash"></i>
                             </i>
-
-
-
 
                         </td>
                     </tr>
@@ -220,8 +210,6 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-
-
 
                             </div>
                         </div>
@@ -242,8 +230,8 @@
                                     <!-- You can populate this form with data from the current row -->
                                     <input type="hidden" name="recordId" value="<%= rs.getInt("id") %>">
                                     <div class="mb-3">
-                                        <label for="addres class="form-label">Address:</label>
-                                        <input type="text" class="form-control" id="Address" name="address" value="<%= rs.getString("endereco") %>">
+                                        <label for="address" class="form-label">Address:</label>
+                                        <input type="text" class="form-control" id="address" name="address" value="<%= rs.getString("endereco") %>">
                                     </div>
                                     <!-- Add more input fields as needed for editing -->
                                     <div class="mb-3">
@@ -252,7 +240,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="price" class="form-label">Price:</label>
-                                        <input type="number" class="form-control" id="price" name="price" value="<%= rs.getBigDecimal("preco") %>">
+                                        <input type="text" class="form-control" id="price" name="price" value="<%= rs.getBigDecimal("preco") %>">
                                     </div>
                                     <div class="mb-3">
                                         <label for="sallerName" class="form-label">Saller Name:</label>
@@ -260,7 +248,7 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="sallerPhone" class="form-label">saller Phone:</label>
-                                       <!--alterar para tipo numerico--> <input type="text" class="form-control" id="sallerPhone" name="sallerPhone" value="<%= rs.getInt("telefone_vendedor") %>">
+                                       <input type="text" class="form-control" id="sallerPhone" name="sallerPhone" value="<%= rs.getString("telefone_vendedor") %>">
                                     </div>
                                     <div class="mb-3">
                                         <label for="sallerEmail" class="form-label">Saller Email:</label>
@@ -289,9 +277,6 @@
                 %>
                 </tbody>
             </table>
-
-
-
     
             <%
             } else {
@@ -301,10 +286,7 @@
             }
             %>
 
-
-
         </div>
-            
 
         <script>
             
@@ -324,7 +306,6 @@
                 }
             }
         </script>
-
 
         <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
         <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>

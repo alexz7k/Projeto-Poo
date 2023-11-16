@@ -20,9 +20,9 @@
                 int recordId = Integer.parseInt(request.getParameter("recordId"));
                 String address = request.getParameter("address");
                 String category = request.getParameter("category");
-                String priceStr = request.getParameter("price");
+                String priceStr = request.getParameter("price").replace(",", ".");
                 String sallerName = request.getParameter("sallerName");
-                int sallerPhone = Integer.parseInt(request.getParameter("sallerPhone"));
+                String sallerPhone = = request.getParameter("sallerPhone");
                 String sallerEmail = request.getParameter("sallerEmail");
                 String status = request.getParameter("status");
                 
@@ -36,7 +36,7 @@
                 preparedStatement.setString(2, category);
                 preparedStatement.setDouble(3, price);
                 preparedStatement.setString(4, sallerName);
-                preparedStatement.setInt(5, sallerPhone);
+                preparedStatement.setString(5, sallerPhone);
                 preparedStatement.setString(6, sallerEmail);
                 preparedStatement.setString(7, status);
                 preparedStatement.setInt(8, recordId);

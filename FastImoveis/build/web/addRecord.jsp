@@ -10,7 +10,6 @@ String telefone_vendedor = request.getParameter("telefone_vendedor");
 String email_vendedor = request.getParameter("email_vendedor");
 String status = request.getParameter("status");
 
-
 // Database connection parameters
 String dbUrl = "jdbc:mysql://localhost/fastimoveis?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
 String dbUser = "root";

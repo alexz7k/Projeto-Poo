@@ -1,7 +1,5 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 
-
-
 <section class="vh-100" style="background-color: #508bfc;">
     <div class="container py-5 h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
@@ -11,7 +9,6 @@
 
                         <h3 class="mb-5">Registrar</h3>
                         <form action="registro_processar.jsp" method="post">
-                            
                             
                             <div class="form-outline mb-4">
                                 <input type="text" id="name" placeholder="Nome" name="nome" class="form-control form-control-lg" />
@@ -28,14 +25,9 @@
 
                             </div>
 
-
-
-
                             <button class="btn btn-primary btn-lg btn-block" type="submit">Registrar</button>
 
                         </form>
-
-                   
 
                     </div>
                 </div>
