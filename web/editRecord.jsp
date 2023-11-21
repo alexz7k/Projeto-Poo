@@ -1,4 +1,5 @@
 <%@ page import="java.sql.*" %>
+<%@ page import="java.math.BigDecimal" %>
 
 <!DOCTYPE html>
 <html>
@@ -22,19 +23,20 @@
                 String category = request.getParameter("category");
                 String priceStr = request.getParameter("price").replace(",", ".");
                 String sallerName = request.getParameter("sallerName");
-                String sallerPhone = = request.getParameter("sallerPhone");
+                String sallerPhone = request.getParameter("sallerPhone");
                 String sallerEmail = request.getParameter("sallerEmail");
                 String status = request.getParameter("status");
                 
                 // Convert the price from String to Double
-                Double price = Double.parseDouble(priceStr);
+                //Double price = Double.parseDouble(priceStr);
+                BigDecimal price = new BigDecimal(priceStr);
                 
                 String updateQuery = "UPDATE imoveis SET endereco=?, categoria=?, preco=?, nome_vendedor=?, telefone_vendedor=?, email_vendedor=?, status=? WHERE id=?";
                 
                 PreparedStatement preparedStatement = conn.prepareStatement(updateQuery);
                 preparedStatement.setString(1, address);
                 preparedStatement.setString(2, category);
-                preparedStatement.setDouble(3, price);
+                preparedStatement.setBigDecimal(3, price);
                 preparedStatement.setString(4, sallerName);
                 preparedStatement.setString(5, sallerPhone);
                 preparedStatement.setString(6, sallerEmail);

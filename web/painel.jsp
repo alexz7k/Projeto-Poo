@@ -28,63 +28,8 @@
          if (nomeUsuario != null) {
     %>
 
-    <!-- Navbar -->  <!-- alterar navbar, para que seja possível a funcionalidade -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <!-- Container wrapper -->
-        <div class="container-fluid">
-            <!-- Toggle button -->
-            <button
-                class="navbar-toggler"
-                type="button"
-                data-mdb-toggle="collapse"
-                data-mdb-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent"
-                aria-expanded="false"
-                aria-label="Toggle navigation"
-                >
-                <i class="fas fa-bars"></i>
-            </button>
-
-            <!-- Collapsible wrapper -->
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <!-- Navbar brand -->
-                <a class="navbar-brand mt-2 mt-lg-0" href="#">
-                    <img
-                        src="https://mdbcdn.b-cdn.net/img/logo/mdb-transaprent-noshadows.webp"
-                        height="15"
-                        alt="MDB Logo"
-                        loading="lazy"
-                        />
-                </a>
-                <!-- Left links -->
-              
-                <!-- Left links -->
-            </div>
-            <!-- Collapsible wrapper -->
-
-            <!-- Right elements -->
-            <div class="d-flex align-items-center">
-                <!-- Icon -->
-                <a class="text-reset me-3" href="#">
-                    <i class="fas fa-shopping-cart"></i>
-                </a>
-               
-                <div class="dropdown">
-                    <a>
-                        <h5 class="mt-3" style="color: white;">Bem-vindo, <%= nomeUsuario %>!</h5>
-
-                    </a>
-                       
-                <div class="ms-3">
-        <a href="logout.jsp" class="btn btn-outline-light">Logout</a>
-    </div>
-            <!-- Right elements -->
-        </div>
-        <!-- Container wrapper -->
-    </nav>
-    <!-- Navbar -->
-
     <body>
+        <%@include file="WEB-INF/jspf/header.jspf" %>
         <div class="container">
 
             <h2 class="mt-5">Listagem de Imóveis</h2>
