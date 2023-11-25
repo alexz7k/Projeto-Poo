@@ -5,7 +5,7 @@
 <html>
 <head>
     <title>Edit Properties Item</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">  <!-- CSS do Bootstrap adicionado -->
 </head>
 <body>
     <div class="container">
@@ -13,12 +13,12 @@
 
         <%
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/fastimoveis/?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "");
+            Class.forName("com.mysql.cj.jdbc.Driver");  // Carrega o driver JDBC do MySQL
+            Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/fastimoveis/?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "");  // Estabelece a conexão com o banco de dados
             
-            // Check if the form was submitted
-            if (request.getMethod().equalsIgnoreCase("POST")) {
-                int recordId = Integer.parseInt(request.getParameter("recordId"));
+            
+            if (request.getMethod().equalsIgnoreCase("POST")) {  // Verifica se o formulário foi enviado
+                int recordId = Integer.parseInt(request.getParameter("recordId"));  // Obtém os parâmetros do formulário
                 String address = request.getParameter("address");
                 String category = request.getParameter("category");
                 String priceStr = request.getParameter("price").replace(",", ".");
@@ -27,11 +27,11 @@
                 String sallerEmail = request.getParameter("sallerEmail");
                 String status = request.getParameter("status");
                 
-                // Convert the price from String to Double
-                //Double price = Double.parseDouble(priceStr);
+                // Converte o preço de String para BigDecimal
                 BigDecimal price = new BigDecimal(priceStr);
                 
-                String updateQuery = "UPDATE imoveis SET endereco=?, categoria=?, preco=?, nome_vendedor=?, telefone_vendedor=?, email_vendedor=?, status=? WHERE id=?";
+                String updateQuery = "UPDATE imoveis SET endereco=?, categoria=?, preco=?, nome_vendedor=?, telefone_vendedor=?, email_vendedor=?, status=? WHERE id=?";  // Query SQL para atualizar o registro
+
                 
                 PreparedStatement preparedStatement = conn.prepareStatement(updateQuery);
                 preparedStatement.setString(1, address);
@@ -43,10 +43,10 @@
                 preparedStatement.setString(7, status);
                 preparedStatement.setInt(8, recordId);
                 
-                int rowsUpdated = preparedStatement.executeUpdate();
+                int rowsUpdated = preparedStatement.executeUpdate();  // Executa a atualização do registro
                 preparedStatement.close();
                 
-                if (rowsUpdated > 0) {
+                if (rowsUpdated > 0) {  // Exibe mensagem de sucesso ou falha
         %>
         <div class="alert alert-success" role="alert">
             Record updated successfully!

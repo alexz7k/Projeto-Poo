@@ -11,6 +11,6 @@
     <title>Logout</title>
 </head>
 <body>
-    <p>Você foi desconectado com sucesso. <a href="index.jsp">Clique aqui</a> para fazer login novamente.</p>
+    <p>Você foi desconectado com sucesso. <a href="index.jsp">Clique aqui</a> para fazer login novamente.</p>  <!-- Mensagem exibida ao usuário após o logout -->
 </body>
 </html>

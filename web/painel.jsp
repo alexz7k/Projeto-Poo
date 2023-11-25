@@ -1,19 +1,20 @@
-<%@ page import="java.sql.*" %>
-<%@ page import="java.io.*" %>
+<%@ page import="java.sql.*" %>  <!-- Importação de classes SQL -->
+<%@ page import="java.io.*" %>  <!-- Importação de classes de entrada e saída de dados do java -->
 
 <!DOCTYPE html>
 <html>
     <head>
-        <title>FastImóveis</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-        <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <title>FastImóveis</title>  <!-- Título da página no navegador -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">  <!-- Inclui o arquivo CSS do Bootstrap para estilização -->
+        <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">  <!-- Inclui o arquivo CSS do DataTables Bootstrap para estilização de tabelas -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />  <!-- Inclui o arquivo CSS do Font Awesome para ícones -->
 
-        <style>.edit-icon {
-                color: blue;
-            }
+        <!-- Definição de cores paras ícones de ações (linha 21: Define o cursor como ponteiro ao passar sobre botões de ícones; linha 22: Adiciona uma transição suave de cor com duração de 0.2 segundos) -->
+        <style>.edit-icon {  
+                color: blue;  
+            }  
 
-            .delete-icon {
+            .delete-icon {  
                 color: red;
             }
             .icon-button {
@@ -24,12 +25,12 @@
 
     </head>
     <%
-         String nomeUsuario = (String) session.getAttribute("nomeUsuario");
-         if (nomeUsuario != null) {
+         String nomeUsuario = (String) session.getAttribute("nomeUsuario");  // Recupera o nome do usuário armazenado na sessão
+         if (nomeUsuario != null) {  // Verifica se o nome do usuário não é nulo (se o usuário está autenticado)
     %>
 
     <body>
-        <%@include file="WEB-INF/jspf/header.jspf" %>
+        <%@include file="WEB-INF/jspf/header.jspf" %>  <!-- Caminho para anexar o arquivo de cabeçalho com barra de navegação -->
         <div class="container">
 
             <h2 class="mt-5">Listagem de Imóveis</h2>
@@ -45,13 +46,13 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="addModalLabel">Adicionar Novo Imóvel</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <h5 class="modal-title" id="addModalLabel">Adicionar Novo Imóvel</h5>  <!-- Título do modal -->
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>  <!-- Botão de fechar o modal -->
                         </div>
                         <div class="modal-body">
-                            <!-- Add form fields here to input a new food item -->
-                            <form method="post" action="addRecord.jsp">
-                                <div class="mb-3">
+                            
+                            <form method="post" action="addRecord.jsp">  <!-- Formulário para adicionar um novo imóvel, realizando chamada para o arquivo addRecord.jsp -->
+                                <div class="mb-3">  <!-- Campos do formulário para inserir informações sobre o imóvel -->
                                     <label for="nome" class="form-label">Endereço:</label>
                                     <input type="text" class="form-control" id="endereco" name="endereco">
                                 </div>
@@ -89,16 +90,16 @@
                                     </select>
                                 </div>
                                 
-                                <button type="submit" class="btn btn-primary">Adicionar</button>
+                                <button type="submit" class="btn btn-primary">Adicionar</button>  <!-- Botão para adicionar -->
                             </form>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <table id="imoveisTable" class="table table-striped">
-                <thead>
-                    <tr>
+            <table id="imoveisTable" class="table table-striped">  <!-- Tabela HTML para exibir a lista de imóveis -->
+                <thead>  <!-- Cabeçalho da tabela com os nomes das colunas -->
+                    <tr>  
                         <th>ID</th>
                         <th>Endereço</th>
                         <th>Categoria</th>
@@ -110,8 +111,8 @@
                         <th>Ações</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <%
+                <tbody>  
+                    <%  // Script JavaServer Pages (JSP) que acessa o banco de dados para obter a lista de registros 
                     try {
                         Class.forName("com.mysql.cj.jdbc.Driver");
                         Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/fastimoveis?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "");
@@ -119,9 +120,9 @@
                         String query = "SELECT * FROM imoveis";
                         ResultSet rs = stmt.executeQuery(query);
 
-                        while (rs.next()) {
+                        while (rs.next()) {  // Loop para iterar sobre os resultados da consulta e exibir os dados na tabela
                     %>
-                    <tr>
+                    <tr>  <!-- Linha da tabela com os dados de um imóvel -->
                         <td><%= rs.getInt("id") %></td>
                         <td><%= rs.getString("endereco") %></td>
                         <td><%= rs.getString("categoria") %></td>
@@ -130,7 +131,7 @@
                         <td><%= rs.getString("telefone_vendedor") %></td>
                         <td><%= rs.getString("email_vendedor") %></td>
                         <td><%= rs.getString("status") %></td>
-                        <td>
+                        <td> <!-- Ícones para editar e excluir um registro -->
                             <i class="edit-icon icon-button" data-bs-toggle="modal" data-bs-target="#editModal<%= rs.getInt("id") %>">
                                 <i class="fas fa-edit"></i>
                             </i>
@@ -143,7 +144,7 @@
                     </tr>
 
                     <!-- Delete Modal -->
-                <div class="modal fade" id="deleteModal<%= rs.getInt("id") %>" tabindex="-1" aria-labelledby="deleteModalLabel<%= rs.getInt("id") %>" aria-hidden="true">
+                <div class="modal fade" id="deleteModal<%= rs.getInt("id") %>" tabindex="-1" aria-labelledby="deleteModalLabel<%= rs.getInt("id") %>" aria-hidden="true">  <!-- Modal para confirmar a exclusão de um registro -->
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -162,7 +163,7 @@
                 </div>
 
                 <!-- Edit Modal -->
-                <div class="modal fade" id="editModal<%= rs.getInt("id") %>" tabindex="-1" aria-labelledby="editModalLabel<%= rs.getInt("id") %>" aria-hidden="true">
+                <div class="modal fade" id="editModal<%= rs.getInt("id") %>" tabindex="-1" aria-labelledby="editModalLabel<%= rs.getInt("id") %>" aria-hidden="true">  <!-- Modal para editar um registro -->
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -170,10 +171,10 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <!-- Add form fields here to edit the record -->
-                                <form method="post" action="editRecord.jsp">
-                                    <!-- You can populate this form with data from the current row -->
-                                    <input type="hidden" name="recordId" value="<%= rs.getInt("id") %>">
+                                
+                                <form method="post" action="editRecord.jsp">  <!-- Formulário para editar os detalhes do registro -->
+                                    
+                                    <input type="hidden" name="recordId" value="<%= rs.getInt("id") %>">  <!-- Input hidden para armazenar o ID do registro sendo editado -->
                                     <div class="mb-3">
                                         <label for="address" class="form-label">Address:</label>
                                         <input type="text" class="form-control" id="address" name="address" value="<%= rs.getString("endereco") %>">
@@ -212,11 +213,11 @@
                 </div>
 
                 <%
-                    }
-                    rs.close();
-                    stmt.close();
-                    conn.close();
-                } catch (Exception e) {
+                    }  
+                    rs.close();  // Fecha o ResultSet (conjunto de resultados)
+                    stmt.close();  // Fecha o Statement (declaração SQL)
+                    conn.close();  // Fecha a Connection (conexão com o banco de dados)
+                } catch (Exception e) {  // Imprime informações detalhadas sobre a exceção no console
                     e.printStackTrace();
                 }
                 %>
@@ -224,7 +225,7 @@
             </table>
     
             <%
-            } else {
+            } else {  // Se o usuário não está autenticado, aparecerá a seguite mensagem
             %>
             <p class="mt-3">Você não está autenticado. Por favor, faça login <a href='login.jsp'>aqui</a>.</p>
             <%
@@ -235,35 +236,34 @@
 
         <script>
             
-            function deleteRecord(recordId) {
+            function deleteRecord(recordId) {  // Para deletar registros
                 if (confirm("Are you sure you want to delete this record?")) {
                     $.ajax({
                         type: "POST",
                         url: "deleteRecord.jsp",
                         data: {recordId: recordId},
                         success: function (data) {
-                            // Handle the response (e.g., show a success message or refresh the page)
-                            // You can also use JavaScript to hide the modal after a successful delete.
+                            // Lida com a resposta (por exemplo, exibe uma mensagem de sucesso ou atualiza a página)
 
-                            location.reload(); // Refresh the page
+                            location.reload(); // Atualiza a página
                         }
                     });
                 }
             }
         </script>
 
-        <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
-        <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-        <script src="https://cdn.datatables.net/plug-ins/1.10.25/i18n/Portuguese-Brasil.json"></script>
+        <script src="https://code.jquery.com/jquery-3.7.0.js"></script>  <!-- Inclui a biblioteca jQuery -->
+        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>  <!-- Inclui o plugin DataTables -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>  <!-- Inclui a biblioteca Bootstrap JavaScript -->
+        <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>  <!-- Inclui o estilo Bootstrap para DataTables -->
+        <script src="https://cdn.datatables.net/plug-ins/1.10.25/i18n/Portuguese-Brasil.json"></script>  <!-- Configuração de idioma para DataTables -->
         <script>
             $(document).ready(function () {
                 $('#imoveisTable').DataTable({
                     "language": {
-                        "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Portuguese-Brasil.json"
+                        "url": "//cdn.datatables.net/plug-ins/1.10.25/i18n/Portuguese-Brasil.json"  // Configuração de idioma para DataTables
                     },
-                    "responsive": true
+                    "responsive": true  // Torna a tabela responsiva
                 });
             });
         </script>
