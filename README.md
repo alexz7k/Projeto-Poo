@@ -7,6 +7,9 @@ Este projeto é um sistema de controle de estoque desenvolvido para uma imobili�
 - **Cadastro de Imóveis:** Adição, remoção e atualização de informações sobre os imóveis, incluindo características, localização, preço, entre outros detalhes relevantes.
 
 - **Consulta de Estoque:** Visualização detalhada dos imóveis disponíveis, com filtros e opções de busca para facilitar a localização de propriedades específicas.
+## Imagem do projeto
+![Captura de tela 2023-11-25 141546](https://github.com/alexz7k/Projeto-Poo/assets/130014888/4938f2fb-b5b7-4f7b-be4e-2d2d660c497d)
+
 
 ## Tecnologias Utilizadas
 
