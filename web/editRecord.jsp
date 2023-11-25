@@ -1,3 +1,5 @@
+<!-- editRecord.jsp, arquivo utilizado quando for necessário realizar a edição de um registro no banco de dados diretamente pelo projeto -->
+
 <%@ page import="java.sql.*" %>
 <%@ page import="java.math.BigDecimal" %>
 
