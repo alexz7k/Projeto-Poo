@@ -1,3 +1,5 @@
+<!--  deleteRecord.jsp, arquivo utilizado quando for necessário realizar a remoção de um registro no banco de dados, através do projeto.-->
+
 <%@ page import="java.sql.*" %>
 
 <%
