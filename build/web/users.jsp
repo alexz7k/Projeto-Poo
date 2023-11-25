@@ -1,8 +1,4 @@
-<%-- 
-    Document   : users
-    Created on : 12 de nov. de 2023, 01:41:59
-    Author     : LGBadures
---%>
+<!--users.jsp, arquivo utilizado para apresentar aos demais usuários, que não são administradores a página com os registros do banco de dados, porém sem a possibilidade de adicionar, editar e deletar registros.-->
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*" %>
