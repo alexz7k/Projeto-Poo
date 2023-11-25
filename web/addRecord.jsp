@@ -1,3 +1,5 @@
+<!--addRecord.jsp, arquivo utilizado para adicionar um novo registro ao banco de dados, diretamente pelo projeto -->
+
 <%@ page import="java.sql.*, java.math.BigDecimal, java.util.Random" %>
 
 <%
