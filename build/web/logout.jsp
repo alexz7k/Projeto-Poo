@@ -1,3 +1,5 @@
+<!--  logout.jsp, arquivo utilizado para encerrar sessão no projeto-->
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <%
