@@ -1,3 +1,5 @@
+<!--  login_processar.jsp, arquivo utilizado para verificar se os dados digitados em index.jsp coincidem com algum dado no banco de dados-->
+
 <%@ page import="java.sql.*" %> <!-- Importação de classes SQL -->
 <%@ page import="java.io.*" %> <!-- Importação de classes de entrada e saída de dados do java -->
 <%
