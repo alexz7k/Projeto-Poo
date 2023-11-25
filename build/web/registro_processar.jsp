@@ -1,3 +1,5 @@
+<!-- registro_processar.jsp, arquivo responsável para realizar o registro do usuário no banco de dados -->
+
 <%@ page import="java.sql.*" %>  <!-- Importação de classes SQL -->
 <%@ page import="java.io.*" %>  <!-- Importação de classes de entrada e saída de dados do java -->
 <%
