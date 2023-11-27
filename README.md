@@ -20,6 +20,7 @@ Este projeto é um sistema de controle de estoque desenvolvido para uma imobili�
 
 1. **Requisitos:**
    - [lib\mysql-connector-j-8.1.0.jar]
+   - https://www.apachefriends.org/pt_br/index.html - Xampp
 
 2. **Instalação:**
    - Clone este repositório: `git clone https://github.com/alexz7k/Projeto-Poo.git`
