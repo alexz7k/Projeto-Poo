@@ -1,9 +1,3 @@
-<%-- 
-    Document   : users
-    Created on : 12 de nov. de 2023, 01:41:59
-    Author     : LGBadures
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*" %>
 <%@ page import="java.io.*" %>
@@ -16,14 +10,8 @@
         <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">  <!-- Inclui o arquivo CSS do DataTables Bootstrap para estilização de tabelas -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />  <!-- Inclui o arquivo CSS do Font Awesome para ícones -->
 
-        <!-- Definição de cores paras ícones de ações (linha 21: Define o cursor como ponteiro ao passar sobre botões de ícones; linha 22: Adiciona uma transição suave de cor com duração de 0.2 segundos) -->
-        <style>.edit-icon {
-                color: blue;
-            }
-
-            .delete-icon {
-                color: red;
-            }
+        <!-- Definição de cores paras ícones de ações (linha 15: Define o cursor como ponteiro ao passar sobre botões de ícones -->
+        <style>
             .icon-button {
                 cursor: pointer;
                 transition: color 0.2s;
