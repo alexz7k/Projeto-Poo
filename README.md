@@ -30,6 +30,7 @@ Este projeto √© um sistema de controle de estoque desenvolvido para uma imobili√
 
 4. **Autor:**
    - [Alexz7k](https://github.com/alexz7k)
+   - [LGalves123](https://github.com/lgalves123)
 
 ## Status do Projeto
 
