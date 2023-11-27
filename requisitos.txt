@@ -1,0 +1,15 @@
+Cadastro de Imóveis:
+
+Permitir o cadastro de informações detalhadas sobre cada imóvel, como tipo (casa, apartamento, terreno, etc.), localização, características, metragem, número de quartos, preço, e assim por diante.
+
+Pesquisa e Filtros:
+
+Oferecer ferramentas de pesquisa avançada para compradores ou locatários em potencial, com filtros com base em critérios como preço, localização, tipo de imóvel, etc.
+
+Controle de Proprietários:
+
+Gerenciar informações sobre proprietários de imóveis, incluindo informações de contato e acordos de representação.
+
+Controle de Acesso:
+
+Definir permissões de acesso para funcionários da imobiliária, como corretores e gerentes.
