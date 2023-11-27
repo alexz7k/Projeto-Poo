@@ -1,10 +1,10 @@
-<%-- any content can be specified here e.g.: --%>
-<%@ page pageEncoding="UTF-8" %>
+<%@ page pageEncoding="UTF-8" %> //Essa tag define a codificação da página como UTF-8 para garantir que os caracteres sejam interpretados corretamente.
 <div id="session">
      <div id="session">
-<nav v-if="data.role === 'admin'" class="navbar navbar-expand-lg navbar-dark bg-dark">  <!-- Barra de navegação condicional para usuários com a função 'admin' -->
+//verificar se o nome for = admin
+<nav v-if="data.role === 'admin'" class="navbar navbar-expand-lg navbar-dark bg-dark">  <!-- Barra de navegação condicional para usuários com a função 'admin' --> 
   <div class="container-fluid">
-    <a class="navbar-brand" href="painel.jsp"><i class="bi bi-p-square"></i>&nbsp;FastImóveis</a>
+    <a class="navbar-brand" href="painel.jsp"><i class="bi bi-p-square"></i>&nbsp;FastImóveis</a> <!-- Link para a página 'painel.jsp' na barra de navegação -->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
